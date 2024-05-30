@@ -1,0 +1,11 @@
+<!-- templates/forms/book_copy_form.html -->
+{% extends 'library_app/base.html' %}
+{% block content %}
+<h1>Dodaj nową kopię książki</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Zapisz</button>
+    <a href="{% url 'book-copy-list' %}" class="btn btn-secondary">Anuluj</a>
+</form>
+{% endblock %}

@@ -1,0 +1,10 @@
+<!-- templates/forms/loan_confirm_delete.html -->
+{% extends 'library_app/base.html' %}
+{% block content %}
+<h1>Czy na pewno chcesz usunąć wypożyczenie książki "{{ loan.book.title }}" przez "{{ loan.borrower.username }}"?</h1>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Usuń</button>
+    <a href="{% url 'loan-list' %}" class="btn btn-secondary">Anuluj</a>
+</form>
+{% endblock %}

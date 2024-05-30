@@ -1,0 +1,12 @@
+<!-- templates/forms/user_form.html -->
+{% extends 'library_app/base.html' %}
+
+{% block content %}
+  <h1>Dodaj nowego Użytkownika</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    <button type="submit" class="btn btn-primary">Zapisz</button>
+    <a href="{% url 'user-list' %}" class="btn btn-secondary">Anuluj</a>
+  </form>
+{% endblock %}

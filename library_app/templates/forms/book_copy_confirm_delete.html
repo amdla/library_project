@@ -1,0 +1,10 @@
+<!-- templates/forms/book_copy_confirm_delete.html -->
+{% extends 'library_app/base.html' %}
+{% block content %}
+<h1>Czy na pewno chcesz usunąć kopię książki "{{ copy.book.title }}"?</h1>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Usuń</button>
+    <a href="{% url 'book-copy-list' %}" class="btn btn-secondary">Anuluj</a>
+</form>
+{% endblock %}

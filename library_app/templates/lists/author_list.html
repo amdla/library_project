@@ -1,0 +1,32 @@
+<!-- templates/lists/author_list.html -->
+{% extends 'library_app/base.html' %}
+{% block content %}
+<h1>Lista Autorów</h1>
+<a href="{% url 'author-create' %}" class="btn btn-primary mb-3">Dodaj nowego autora</a>
+
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Imię</th>
+      <th scope="col">Nazwisko</th>
+      <th scope="col">Akcje</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for author in authors %}
+      <tr>
+        <td>{{ author.first_name }}</td>
+        <td>{{ author.last_name }}</td>
+        <td>
+          <a href="{% url 'author-update' author.pk %}" class="btn btn-warning btn-sm">Edytuj</a>
+          <a href="{% url 'author-delete' author.pk %}" class="btn btn-danger btn-sm">Usuń</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="3" class="text-center">Brak autorów do wyświetlenia.</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

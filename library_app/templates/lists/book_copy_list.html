@@ -1,0 +1,32 @@
+<!-- templates/lists/book_copy_list.html -->
+{% extends 'library_app/base.html' %}
+{% block content %}
+<h1>Lista Kopii Książek</h1>
+<a href="{% url 'book-copy-create' %}" class="btn btn-primary mb-3">Dodaj nową kopię książki</a>
+
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Książka</th>
+      <th scope="col">Status</th>
+      <th scope="col">Akcje</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for copy in copies %}
+      <tr>
+        <td>{{ copy.book.title }}</td>
+        <td>{{ copy.status }}</td>
+        <td>
+          <a href="{% url 'book-copy-update' copy.pk %}" class="btn btn-warning btn-sm">Edytuj</a>
+          <a href="{% url 'book-copy-delete' copy.pk %}" class="btn btn-danger btn-sm">Usuń</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="3" class="text-center">Brak kopii książek do wyświetlenia.</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

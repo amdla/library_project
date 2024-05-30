@@ -1,0 +1,36 @@
+<!-- templates/lists/loan_list.html -->
+{% extends 'library_app/base.html' %}
+{% block content %}
+<h1>Lista Wypożyczeń</h1>
+<a href="{% url 'loan-create' %}" class="btn btn-primary mb-3">Dodaj nowe wypożyczenie</a>
+
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Książka</th>
+      <th scope="col">Wypożyczający</th>
+      <th scope="col">Data wypożyczenia</th>
+      <th scope="col">Data zwrotu</th>
+      <th scope="col">Akcje</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for loan in loans %}
+      <tr>
+        <td>{{ loan.book_copy.book.title }}</td>
+        <td>{{ loan.borrower.username }}</td>
+        <td>{{ loan.loan_date }}</td>
+        <td>{{ loan.return_date }}</td>
+        <td>
+          <a href="{% url 'loan-update' loan.pk %}" class="btn btn-warning btn-sm">Edytuj</a>
+          <a href="{% url 'loan-delete' loan.pk %}" class="btn btn-danger btn-sm">Usuń</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="5" class="text-center">Brak wypożyczeń do wyświetlenia.</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
