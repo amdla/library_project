@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
-from .models import Book, Loan
+from .models import Author, Book, Loan, Publisher
 
 class CustomUserCreationForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=True, label='Imię')
@@ -36,3 +36,13 @@ class LoanForm(forms.ModelForm):
     class Meta:
         model = Loan
         fields = ('book_id', 'borrower', 'return_date')
+
+class AuthorForm(forms.ModelForm):
+    class Meta:
+        model = Author
+        fields = ['first_name', 'last_name']
+
+class PublisherForm(forms.ModelForm):
+    class Meta:
+        model = Publisher
+        fields = ['name']
