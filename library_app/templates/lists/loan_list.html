@@ -1,5 +1,5 @@
-<!-- templates/lists/loan_list.html -->
 {% extends 'library_app/base.html' %}
+
 {% block content %}
 <h1>Lista Wypożyczeń</h1>
 <a href="{% url 'loan-create' %}" class="btn btn-primary mb-3">Dodaj nowe wypożyczenie</a>
@@ -7,7 +7,7 @@
 <table class="table table-striped">
   <thead class="thead-dark">
     <tr>
-      <th scope="col">Książka</th>
+      <th scope="col">Książka (ID)</th>
       <th scope="col">Wypożyczający</th>
       <th scope="col">Data wypożyczenia</th>
       <th scope="col">Data zwrotu</th>
@@ -17,7 +17,7 @@
   <tbody>
     {% for loan in loans %}
       <tr>
-        <td>{{ loan.book_copy.book.title }}</td>
+        <td>{{ loan.book.title }} ({{ loan.book.unique_id }})</td>
         <td>{{ loan.borrower.username }}</td>
         <td>{{ loan.loan_date }}</td>
         <td>{{ loan.return_date }}</td>

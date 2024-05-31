@@ -12,3 +12,14 @@ add input data verification for:
 - books: publication year, isbn
 - loans: loan date
 - user: email
+
+ksiazka:
+
+
+kopia:
+- autor
+- tytul
+- wydawnictwo
+- rok wydania
+- ISBN
+- 

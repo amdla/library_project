@@ -1,25 +1,11 @@
-<!-- templates/forms/loan_form.html -->
 {% extends 'library_app/base.html' %}
+
 {% block content %}
 <h1>Dodaj Wypożyczenie</h1>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">{% if user_form.instance.pk %}Zaktualizuj{% else %}Zapisz{% endif %}</button>
-    <a href="{% url 'book-list' %}" class="btn btn-secondary">Anuluj</a>
+    <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Zaktualizuj{% else %}Zapisz{% endif %}</button>
+    <a href="{% url 'loan-list' %}" class="btn btn-secondary">Anuluj</a>
 </form>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const bookSelect = document.getElementById('id_book');
-        const copySelect = document.getElementById('id_book_copy');
-        bookSelect.addEventListener('change', function() {
-            const bookId = this.value;
-            fetch(`{% url 'ajax-get-copies' %}?book=${bookId}`)
-                .then(response => response.json())
-                .then(data => {
-                    copySelect.innerHTML = data.html_book_copy_list;
-                });
-        });
-    });
-</script>
 {% endblock %}
