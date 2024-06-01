@@ -1,10 +1,11 @@
-<!-- templates/forms/book_confirm_delete.html -->
 {% extends 'library_app/base.html' %}
+
 {% block content %}
-<h1>Czy na pewno chcesz usunąć książkę "{{ book.title }}"?</h1>
-<form method="post">
+  <h2>Potwierdź usunięcie</h2>
+  <p>Czy na pewno chcesz usunąć książkę "{{ book.title }}"?</p>
+  <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Usuń</button>
+    <button type="submit" class="btn btn-danger">Potwierdź</button>
     <a href="{% url 'book-list' %}" class="btn btn-secondary">Anuluj</a>
-</form>
+  </form>
 {% endblock %}

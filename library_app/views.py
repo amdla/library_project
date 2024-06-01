@@ -1,9 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.utils import timezone
-import requests
 from .models import Book, Loan
-from .forms import CustomUserCreationForm, CustomUserChangeForm, BookForm, LoanForm
+from .forms import BookForm, LoanForm, UserForm
 
 def home(request):
     return render(request, 'library_app/home.html')
@@ -14,25 +13,23 @@ def user_list(request):
 
 def user_create(request):
     if request.method == 'POST':
-        user_form = CustomUserCreationForm(request.POST)
+        user_form = UserForm(request.POST)
         if user_form.is_valid():
             user = user_form.save(commit=False)
-            user.username = f"{user_form.cleaned_data['first_name']}.{user_form.cleaned_data['last_name']}".lower()
-            user.save()
             return redirect('user-list')
     else:
-        user_form = CustomUserCreationForm()
+        user_form = UserForm()
     return render(request, 'forms/user_form.html', {'user_form': user_form})
 
 def user_update(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.method == 'POST':
-        user_form = CustomUserChangeForm(request.POST, instance=user)
+        user_form = UserForm(request.POST, instance=user)
         if user_form.is_valid():
             user_form.save()
             return redirect('user-list')
     else:
-        user_form = CustomUserChangeForm(instance=user)
+        user_form = UserForm(instance=user)
     return render(request, 'forms/user_form.html', {'user_form': user_form})
 
 def user_delete(request, pk):
@@ -51,11 +48,7 @@ def book_create(request):
         form = BookForm(request.POST)
         if form.is_valid():
             book = form.save(commit=False)
-            book_data = get_book_data_from_isbn(book.isbn)
-            book.title = book_data.get('title')
-            book.author = book_data.get('authors')
-            book.publisher = book_data.get('publisher')
-            book.publication_year = book_data.get('publishedDate')
+            book.fill_book_data()
             book.save()
             return redirect('book-list')
     else:
@@ -117,18 +110,3 @@ def loan_delete(request, pk):
         loan.delete()
         return redirect('loan-list')
     return render(request, 'forms/loan_confirm_delete.html', {'loan': loan})
-
-def get_book_data_from_isbn(isbn):
-    url = f'https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}'
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        if 'items' in data:
-            book_data = data['items'][0]['volumeInfo']
-            return {
-                'title': book_data.get('title', 'N/A'),
-                'authors': ', '.join(book_data.get('authors', [])),
-                'publisher': book_data.get('publisher', 'N/A'),
-                'publishedDate': book_data.get('publishedDate', 'N/A')
-            }
-    return {}

@@ -1,12 +1,11 @@
-<!-- templates/forms/user_confirm_delete.html -->
 {% extends 'library_app/base.html' %}
 
 {% block content %}
-  <h2>Confirm Delete</h2>
-  <p>Are you sure you want to delete user "{{ user.username }}"?</p>
+  <h2>Potwierdź usunięcie</h2>
+  <p>Czy na pewno chcesz usunąć użytkownika "{{ user.first_name }} {{ user.last_name }}"?</p>
   <form method="post">
     {% csrf_token %}
-    <input type="submit" value="Confirm" class="btn btn-danger">
-    <a href="{% url 'user-list' %}" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-danger">Potwierdź</button>
+    <a href="{% url 'user-list' %}" class="btn btn-secondary">Anuluj</a>
   </form>
 {% endblock %}

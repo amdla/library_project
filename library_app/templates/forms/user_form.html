@@ -1,8 +1,7 @@
-<!-- templates/forms/user_form.html -->
 {% extends 'library_app/base.html' %}
 
 {% block content %}
-  <h1>Dodaj nowego Użytkownika</h1>
+  <h1>Dodaj nowego użytkownika</h1>
   <form method="post">
     {% csrf_token %}
     {{ user_form.as_p }}
