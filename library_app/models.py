@@ -1,21 +1,7 @@
 from time import timezone
-from urllib import request
 from django.db import models
 from django.contrib.auth.models import User
 import requests
-
-class Author(models.Model):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return f'{self.first_name} {self.last_name}'
-
-class Publisher(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
 
 class Book(models.Model):
     STATUS_CHOICES = (
@@ -66,7 +52,6 @@ class Loan(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # No additional fields needed for this example
 
     def __str__(self):
         return self.user.username

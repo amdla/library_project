@@ -1,19 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from .models import Author, Publisher, Book, Loan, UserProfile
+from .models import Book, Loan, UserProfile
 
-# Admin for Author
-@admin.register(Author)
-class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name')
-    search_fields = ('first_name', 'last_name')
 
-# Admin for Publisher
-@admin.register(Publisher)
-class PublisherAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    search_fields = ('name',)
 
 # Admin for Book
 @admin.register(Book)

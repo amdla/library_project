@@ -1,11 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
-from django.template.loader import render_to_string
-from django.http import JsonResponse
 from django.utils import timezone
 import requests
-from .models import Book, Loan, Author, Publisher
-from .forms import CustomUserCreationForm, CustomUserChangeForm, BookForm, LoanForm, AuthorForm, PublisherForm
+from .models import Book, Loan
+from .forms import CustomUserCreationForm, CustomUserChangeForm, BookForm, LoanForm
 
 def home(request):
     return render(request, 'library_app/home.html')
@@ -134,67 +132,3 @@ def get_book_data_from_isbn(isbn):
                 'publishedDate': book_data.get('publishedDate', 'N/A')
             }
     return {}
-
-def author_list(request):
-    authors = Author.objects.all()
-    return render(request, 'lists/author_list.html', {'authors': authors})
-
-def author_create(request):
-    if request.method == 'POST':
-        form = AuthorForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('author-list')
-    else:
-        form = AuthorForm()
-    return render(request, 'forms/author_form.html', {'form': form})
-
-def author_update(request, pk):
-    author = get_object_or_404(Author, pk=pk)
-    if request.method == 'POST':
-        form = AuthorForm(request.POST, instance=author)
-        if form.is_valid():
-            form.save()
-            return redirect('author-list')
-    else:
-        form = AuthorForm(instance=author)
-    return render(request, 'forms/author_form.html', {'form': form})
-
-def author_delete(request, pk):
-    author = get_object_or_404(Author, pk=pk)
-    if request.method == 'POST':
-        author.delete()
-        return redirect('author-list')
-    return render(request, 'forms/author_confirm_delete.html', {'author': author})
-
-def publisher_list(request):
-    publishers = Publisher.objects.all()
-    return render(request, 'lists/publisher_list.html', {'publishers': publishers})
-
-def publisher_create(request):
-    if request.method == 'POST':
-        form = PublisherForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('publisher-list')
-    else:
-        form = PublisherForm()
-    return render(request, 'forms/publisher_form.html', {'form': form})
-
-def publisher_update(request, pk):
-    publisher = get_object_or_404(Publisher, pk=pk)
-    if request.method == 'POST':
-        form = PublisherForm(request.POST, instance=publisher)
-        if form.is_valid():
-            form.save()
-            return redirect('publisher-list')
-    else:
-        form = PublisherForm(instance=publisher)
-    return render(request, 'forms/publisher_form.html', {'form': form})
-
-def publisher_delete(request, pk):
-    publisher = get_object_or_404(Publisher, pk=pk)
-    if request.method == 'POST':
-        publisher.delete()
-        return redirect('publisher-list')
-    return render(request, 'forms/publisher_confirm_delete.html', {'publisher': publisher})
