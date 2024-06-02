@@ -30,7 +30,6 @@ class Book(models.Model):
                 book_info = book_data["items"][0]["volumeInfo"]
                 self.title = book_info.get("title", "No Title")
                 self.authors = ", ".join(book_info.get("authors", []))
-                self.publisher = book_info.get("publisher", "Unknown Publisher")
                 self.publication_date = book_info.get("publishedDate", "Unknown Date")
 
 class Loan(models.Model):
