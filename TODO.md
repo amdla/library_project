@@ -1,7 +1,4 @@
-loans: connect borrowers with usernames
 loans: choose date from a calendar
 loans: add book name field filled using its ID?
-books: remove edit field to avoid further problems
-users: create username with $first_name|$surname|$email 
-users: display just username
+book: create instances (something like $bookTitle|$booksID so that its possible to choose instance when creating loan)
 homepage: fill with content?

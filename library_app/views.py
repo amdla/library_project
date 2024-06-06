@@ -1,3 +1,5 @@
+from pyexpat.errors import messages
+from django.db import IntegrityError
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -6,21 +8,21 @@ from .forms import BookForm, LoanForm, UserForm
 
 def home(request):
     return render(request, 'library_app/home.html')
-
-def user_list(request):
-    users = User.objects.all()
-    return render(request, 'lists/user_list.html', {'users': users})
-
 def user_create(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
         if user_form.is_valid():
             user = user_form.save(commit=False)
+            user.username = f"{user_form.cleaned_data['first_name']}|{user_form.cleaned_data['last_name']}|{user_form.cleaned_data['email']}"
             user.save()
             return redirect('user-list')
     else:
         user_form = UserForm()
     return render(request, 'forms/user_form.html', {'user_form': user_form})
+
+def user_list(request):
+    users = User.objects.all()
+    return render(request, 'lists/user_list.html', {'users': users})
 
 def user_update(request, pk):
     user = get_object_or_404(User, pk=pk)

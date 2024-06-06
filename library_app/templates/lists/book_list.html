@@ -24,7 +24,6 @@
         <td>{{ book.authors }}</td>
         <td>{{ book.publication_date }}</td>
         <td>
-          <a href="{% url 'book-update' book.pk %}" class="btn btn-warning btn-sm">Edytuj</a>
           <a href="{% url 'book-delete' book.pk %}" class="btn btn-danger btn-sm">Usuń</a>
         </td>
       </tr>
