@@ -7,6 +7,8 @@
 <table class="table table-striped">
   <thead class="thead-dark">
     <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Library ID</th>
       <th scope="col">ISBN</th>
       <th scope="col">Tytuł</th>
       <th scope="col">Autorzy</th>
@@ -17,6 +19,8 @@
   <tbody>
     {% for book in books %}
       <tr>
+        <td>{{ book.unique_ID }}</td>
+        <td>{{ book.libraryID }}</td>
         <td>{{ book.isbn }}</td>
         <td>{{ book.title }}</td>
         <td>{{ book.authors }}</td>

@@ -16,6 +16,7 @@ def user_create(request):
         user_form = UserForm(request.POST)
         if user_form.is_valid():
             user = user_form.save(commit=False)
+            user.save()
             return redirect('user-list')
     else:
         user_form = UserForm()

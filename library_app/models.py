@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 import requests
@@ -15,8 +16,11 @@ class Book(models.Model):
     publication_date = models.CharField(max_length=10, blank=True, default='Unknown Date')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='available')
     unique_id = models.AutoField(primary_key=True, unique=True)
+    libraryID = models.CharField(max_length=36, unique=True, blank=True, default='')
 
     def save(self, *args, **kwargs):
+        if not self.libraryID:
+            self.libraryID = str(uuid.uuid4())
         if not self.title or not self.authors or not self.publisher:
             self.fill_book_data()
         super(Book, self).save(*args, **kwargs)
@@ -31,6 +35,7 @@ class Book(models.Model):
                 self.title = book_info.get("title", "No Title")
                 self.authors = ", ".join(book_info.get("authors", []))
                 self.publication_date = book_info.get("publishedDate", "Unknown Date")
+                self.publisher = book_info.get("publisher", "Unknown Publisher")
 
 class Loan(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
