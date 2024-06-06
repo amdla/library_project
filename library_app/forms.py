@@ -4,15 +4,14 @@ from .models import Book, Loan
 
 class BookForm(forms.ModelForm):
     isbn = forms.CharField(max_length=13, required=True, label='ISBN')
-    libraryID = forms.CharField(max_length=20, required=True, label='Library ID')
 
     class Meta:
         model = Book
-        fields = ('uniqueID', 'isbn', 'libraryID', 'title', 'authors', 'publisher', 'publication_date')
+        fields = ('isbn',)
 
 class LoanForm(forms.ModelForm):
     isbn = forms.CharField(max_length=13, required=True, label='ISBN')
-    book = forms.ModelChoiceField(queryset=Book.objects.none(), label='Book (Library ID)')
+    book = forms.ModelChoiceField(queryset=Book.objects.none(), label='Book (Unique ID)')
 
     class Meta:
         model = Loan
