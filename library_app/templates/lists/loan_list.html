@@ -7,7 +7,7 @@
 <table class="table table-striped">
   <thead class="thead-dark">
     <tr>
-      <th scope="col">Książka (ID)</th>
+      <th scope="col">Książka</th>
       <th scope="col">Wypożyczający</th>
       <th scope="col">Data wypożyczenia</th>
       <th scope="col">Data zwrotu</th>
@@ -20,7 +20,7 @@
         <td>{{ loan.book.title }} ({{ loan.book.unique_id }})</td>
         <td>{{ loan.borrower.username }}</td>
         <td>{{ loan.loan_date|date:"d-m-Y" }}</td>
-        <td>{{ loan.return_date }}</td>
+        <td>{{ loan.return_date|date:"d-m-Y" }}</td>
         <td>
           <a href="{% url 'loan-update' loan.pk %}" class="btn btn-warning btn-sm">Edytuj</a>
           <a href="{% url 'loan-delete' loan.pk %}" class="btn btn-danger btn-sm">Usuń</a>
@@ -33,4 +33,6 @@
     {% endfor %}
   </tbody>
 </table>
+
+
 {% endblock %}

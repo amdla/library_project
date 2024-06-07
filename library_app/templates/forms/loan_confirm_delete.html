@@ -3,6 +3,8 @@
 {% block content %}
   <h2>Potwierdź usunięcie</h2>
   <p>Czy na pewno chcesz usunąć wypożyczenie książki "{{ loan.book.title }}" wypożyczonej przez "{{ loan.borrower.username }}"?</p>
+  <p>Data wypożyczenia: {{ loan.loan_date|date:"d-m-Y" }}</p>
+  <p>Data zwrotu: {{ loan.return_date|date:"d-m-Y" }}</p>
   <form method="post">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">Potwierdź</button>

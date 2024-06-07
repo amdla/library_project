@@ -3,6 +3,10 @@ from django.contrib.auth.models import User
 from .models import Book, Loan
 from django.forms.widgets import DateInput
 
+class BookIDChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return str(obj.unique_id)
+
 class BookForm(forms.ModelForm):
     isbn = forms.CharField(max_length=13, required=True, label='ISBN')
 
@@ -11,24 +15,18 @@ class BookForm(forms.ModelForm):
         fields = ('isbn',)
 
 class LoanForm(forms.ModelForm):
-    isbn = forms.CharField(max_length=13, required=True, label='ISBN')
-    book = forms.ModelChoiceField(queryset=Book.objects.none(), label='Book (Unique ID)')
-    return_date = forms.DateField(widget=DateInput(attrs={'type': 'date'}))
+    book = BookIDChoiceField(queryset=Book.objects.all(), label='ID książki')
+    borrower = forms.ModelChoiceField(queryset=User.objects.all(), label='Wypożyczający')
+    return_date = forms.DateField(widget=DateInput(attrs={'type': 'date'}), label='Data zwrotu')
 
     class Meta:
         model = Loan
-        fields = ('isbn', 'book', 'borrower', 'return_date')
+        fields = ('book', 'borrower', 'return_date')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if 'isbn' in self.data:
-            try:
-                isbn = self.data.get('isbn')
-                self.fields['book'].queryset = Book.objects.filter(isbn=isbn)
-            except (ValueError, TypeError):
-                pass
-        else:
-            self.fields['book'].queryset = Book.objects.none()
+        self.fields['book'].queryset = Book.objects.all()
+        self.fields['borrower'].queryset = User.objects.all()
 
 class UserForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30, required=True, label='Imię')

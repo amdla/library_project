@@ -94,6 +94,7 @@ def loan_create(request):
         form = LoanForm()
     return render(request, 'forms/loan_form.html', {'form': form})
 
+
 def loan_update(request, pk):
     loan = get_object_or_404(Loan, pk=pk)
     if request.method == 'POST':

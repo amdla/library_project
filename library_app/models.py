@@ -10,18 +10,17 @@ class Book(models.Model):
     )
 
     isbn = models.CharField(max_length=13)
-    title = models.CharField(max_length=255, blank=True, default='No Title')
-    authors = models.CharField(max_length=255, blank=True, default='Unknown Author')
-    publisher = models.CharField(max_length=255, blank=True, default='Unknown Publisher')
-    publication_date = models.CharField(max_length=10, blank=True, default='Unknown Date')
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='available')
+    title = models.CharField(max_length=255, blank=True, default='Brak tytułu')
+    authors = models.CharField(max_length=255, blank=True, default='Autor nieznany')
+    publication_date = models.CharField(max_length=10, blank=True, default='Data nieznana')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='dostępna')
     unique_id = models.AutoField(primary_key=True, unique=True)
     libraryID = models.CharField(max_length=36, unique=True, blank=True, default='')
 
     def save(self, *args, **kwargs):
         if not self.libraryID:
             self.libraryID = str(uuid.uuid4())
-        if not self.title or not self.authors or not self.publisher:
+        if not self.title or not self.authors:
             self.fill_book_data()
         super(Book, self).save(*args, **kwargs)
 
@@ -35,7 +34,9 @@ class Book(models.Model):
                 self.title = book_info.get("title", "No Title")
                 self.authors = ", ".join(book_info.get("authors", []))
                 self.publication_date = book_info.get("publishedDate", "Unknown Date")
-                self.publisher = book_info.get("publisher", "Unknown Publisher")
+
+    def __str__(self):
+            return str(self.unique_id)
 
 class Loan(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
