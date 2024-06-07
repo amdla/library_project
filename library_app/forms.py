@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import Book, Loan
+from django.forms.widgets import DateInput
 
 class BookForm(forms.ModelForm):
     isbn = forms.CharField(max_length=13, required=True, label='ISBN')
@@ -12,6 +13,7 @@ class BookForm(forms.ModelForm):
 class LoanForm(forms.ModelForm):
     isbn = forms.CharField(max_length=13, required=True, label='ISBN')
     book = forms.ModelChoiceField(queryset=Book.objects.none(), label='Book (Unique ID)')
+    return_date = forms.DateField(widget=DateInput(attrs={'type': 'date'}))
 
     class Meta:
         model = Loan
