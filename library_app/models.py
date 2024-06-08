@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import requests
 
+
 class Book(models.Model):
     STATUS_CHOICES = (
         ('available', 'Available'),
@@ -36,7 +37,8 @@ class Book(models.Model):
                 self.publication_date = book_info.get("publishedDate", "Unknown Date")
 
     def __str__(self):
-            return str(self.unique_id)
+        return str(self.unique_id)
+
 
 class Loan(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
