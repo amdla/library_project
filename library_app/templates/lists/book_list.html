@@ -1,38 +1,39 @@
 <!-- templates/lists/book_list.html -->
 {% extends 'library_app/base.html' %}
 {% block content %}
-<h1>Lista Książek</h1>
-<a href="{% url 'book-create' %}" class="btn btn-primary mb-3">Dodaj Książkę</a>
+    <h1>Lista Książek</h1>
+    <a href="{% url 'book-create' %}" class="btn btn-primary mb-3">Dodaj Książkę</a>
 
-<table class="table table-striped">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">ISBN</th>
-      <th scope="col">Tytuł</th>
-      <th scope="col">Autorzy</th>
-      <th scope="col">Rok publikacji</th>
-      <th scope="col">Akcje</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for book in books %}
-      <tr>
-        <td>{{ book.unique_id }}</td>
-        <td>{{ book.isbn }}</td>
-        <td>{{ book.title }}</td>
-        <td>{{ book.authors }}</td>
-        <td>{{ book.publication_date }}</td>
-        <td>
-          <a href="{% url 'book-delete' book.pk %}" class="btn btn-danger btn-sm">Usuń</a>
-        </td>
-      </tr>
-    {% empty %}
-      <tr>
-        <td colspan="6" class="text-center">Brak książek do wyświetlenia.</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">ISBN</th>
+            <th scope="col">Tytuł</th>
+            <th scope="col">Autorzy</th>
+            <th scope="col">Rok publikacji</th>
+            <th scope="col">Status</th>  <!-- Translated label for status -->
+            <th scope="col">Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for book in books %}
+            <tr>
+                <td>{{ book.unique_id }}</td>
+                <td>{{ book.isbn }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.authors }}</td>
+                <td>{{ book.publication_date }}</td>
+                <td>{{ book.get_status_display }}</td>  <!-- Display translated status -->
+                <td>
+                    <a href="{% url 'book-delete' book.pk %}" class="btn btn-danger btn-sm">Usuń</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">Brak książek do wyświetlenia.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
-

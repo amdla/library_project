@@ -1,8 +1,10 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
+from django.urls import reverse
 from django.utils import timezone
 from .models import Book, Loan
-from .forms import BookForm, LoanForm, UserForm
+from .forms import BookForm, LoanForm, UserForm, LoanUpdateForm
 
 
 def home(request):
@@ -60,6 +62,7 @@ def book_create(request):
         if form.is_valid():
             book = form.save(commit=False)
             book.fill_book_data()
+            book.status = 'available'
             book.save()
             return redirect('book-list')
     else:
@@ -98,7 +101,7 @@ def loan_create(request):
         if form.is_valid():
             loan = form.save(commit=False)
             loan.loan_date = timezone.now()
-            loan.book.status = 'borrowed'
+            loan.book.status = 'wypożyczona'
             loan.book.save()
             loan.save()
             return redirect('loan-list')
@@ -110,13 +113,20 @@ def loan_create(request):
 def loan_update(request, pk):
     loan = get_object_or_404(Loan, pk=pk)
     if request.method == 'POST':
-        form = LoanForm(request.POST, instance=loan)
+        form = LoanUpdateForm(request.POST, instance=loan)
         if form.is_valid():
-            form.save()
+            loan = form.save(commit=False)
+            if loan.is_returned:
+                loan.book.status = 'available'
+            else:
+                loan.book.status = 'borrowed'
+            loan.book.save()
+            loan.save()
             return redirect('loan-list')
     else:
-        form = LoanForm(instance=loan)
+        form = LoanUpdateForm(instance=loan)
     return render(request, 'forms/loan_form.html', {'form': form})
+
 
 
 def loan_delete(request, pk):
@@ -127,3 +137,17 @@ def loan_delete(request, pk):
         loan.delete()
         return redirect('loan-list')
     return render(request, 'forms/loan_confirm_delete.html', {'loan': loan})
+
+
+def loan_return(request, pk):
+    loan = get_object_or_404(Loan, pk=pk)
+    if request.method == 'POST':
+        loan.is_returned = 'is_returned' in request.POST
+        if loan.is_returned:
+            loan.book.status = 'available'
+        else:
+            loan.book.status = 'borrowed'
+        loan.book.save()
+        loan.save()
+        return HttpResponseRedirect(reverse('loan-list'))
+

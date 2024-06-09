@@ -1,5 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+
 from .models import Book, Loan
 from django.forms.widgets import DateInput
 
@@ -14,22 +17,36 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book
-        fields = ('isbn',)
+        fields = ('isbn', 'status')
 
 
+# forms.py
 class LoanForm(forms.ModelForm):
-    book = BookIDChoiceField(queryset=Book.objects.all(), label='ID książki')
+    book = BookIDChoiceField(queryset=Book.objects.filter(status='available'), label='ID książki')
     borrower = forms.ModelChoiceField(queryset=User.objects.all(), label='Wypożyczający')
     return_date = forms.DateField(widget=DateInput(attrs={'type': 'date'}), label='Data zwrotu')
 
     class Meta:
         model = Loan
-        fields = ('book', 'borrower', 'return_date')
+        fields = ('book', 'borrower', 'return_date')  # Removed 'is_returned' from here
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['book'].queryset = Book.objects.all()
+        self.fields['book'].queryset = Book.objects.filter(status='available')
         self.fields['borrower'].queryset = User.objects.all()
+
+    def clean_return_date(self):
+        return_date = self.cleaned_data.get('return_date')
+        if return_date <= timezone.now().date():
+            raise ValidationError("Data zwrotu musi być późniejsza niż dzisiejsza data.")
+        return return_date
+
+    def clean_book(self):
+        book = self.cleaned_data.get('book')
+        if book.status != 'available':
+            raise ValidationError("Wybrana książka nie jest dostępna.")
+        return book
+
 
 
 class UserForm(forms.ModelForm):
@@ -46,3 +63,18 @@ class UserForm(forms.ModelForm):
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("Istnieje już użytkownik z podanym adresem email. Wprowadź inny adres.")
         return email
+
+
+class LoanUpdateForm(forms.ModelForm):
+    is_returned = forms.BooleanField(label='Czy zwrócona', required=False)
+    return_date = forms.DateField(widget=DateInput(attrs={'type': 'date'}), label='Data zwrotu')
+
+    class Meta:
+        model = Loan
+        fields = ('is_returned', 'return_date')
+
+    def clean_return_date(self):
+        return_date = self.cleaned_data.get('return_date')
+        if return_date <= timezone.now().date():
+            raise ValidationError("Data zwrotu musi być późniejsza niż dzisiejsza data.")
+        return return_date

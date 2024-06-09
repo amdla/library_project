@@ -1,11 +1,21 @@
+<!-- templates/forms/loan_form.html -->
 {% extends 'library_app/base.html' %}
 
 {% block content %}
-  <h1>{% if form.instance.pk %}Edytuj Wypożyczenie{% else %}Dodaj Wypożyczenie{% endif %}</h1>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Zaktualizuj{% else %}Zapisz{% endif %}</button>
-    <a href="{% url 'loan-list' %}" class="btn btn-secondary">Anuluj</a>
-  </form>
+    <h1>{% if form.instance.pk %}Edytuj Wypożyczenie{% else %}Dodaj Wypożyczenie{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field, errors in form.errors.items %}
+                        <li>{{ errors }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Zaktualizuj{% else %}Zapisz{% endif %}</button>
+        <a href="{% url 'loan-list' %}" class="btn btn-secondary">Anuluj</a>
+    </form>
 {% endblock %}
