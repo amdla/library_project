@@ -4,7 +4,7 @@
     <h1>Lista Wypożyczeń</h1>
     <a href="{% url 'loan-create' %}" class="btn btn-primary mb-3">Dodaj nowe wypożyczenie</a>
 
-    <table class="table table-striped">
+    <table id="loanTable" class="table table-striped">
         <thead class="thead-dark">
         <tr>
             <th scope="col">Książka</th>
@@ -35,4 +35,14 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <script>
+        $(document).ready(function () {
+            $('#loanTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.11.3/i18n/pl.json"
+                }
+            });
+        });
+    </script>
 {% endblock %}
