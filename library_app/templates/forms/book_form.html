@@ -1,11 +1,12 @@
+<!-- templates/forms/book_form.html -->
 {% extends 'library_app/base.html' %}
 
 {% block content %}
-  <h1>{% if form.instance.pk %}Edytuj Książkę{% else %}Dodaj Książkę{% endif %}</h1>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Zaktualizuj{% else %}Zapisz{% endif %}</button>
-    <a href="{% url 'book-list' %}" class="btn btn-secondary">Anuluj</a>
-  </form>
+    <h1>Dodaj nową książkę</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Zapisz</button>
+        <a href="{% url 'book-list' %}" class="btn btn-secondary">Anuluj</a>
+    </form>
 {% endblock %}

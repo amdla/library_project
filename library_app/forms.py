@@ -37,13 +37,13 @@ class LoanForm(forms.ModelForm):
     def clean_return_date(self):
         return_date = self.cleaned_data.get('return_date')
         if return_date <= timezone.now().date():
-            raise ValidationError("Data zwrotu musi być późniejsza niż dzisiejsza data.")
+            raise forms.ValidationError("Data zwrotu musi być późniejsza niż dzisiejsza data.")
         return return_date
 
     def clean_book(self):
         book = self.cleaned_data.get('book')
         if book.status != 'available':
-            raise ValidationError("Wybrana książka nie jest dostępna.")
+            raise forms.ValidationError("Wybrana książka nie jest dostępna.")
         return book
 
 
@@ -74,5 +74,5 @@ class LoanUpdateForm(forms.ModelForm):
     def clean_return_date(self):
         return_date = self.cleaned_data.get('return_date')
         if return_date <= timezone.now().date():
-            raise ValidationError("Data zwrotu musi być późniejsza niż dzisiejsza data.")
+            raise forms.ValidationError("Data zwrotu musi być późniejsza niż dzisiejsza data.")
         return return_date

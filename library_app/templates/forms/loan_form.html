@@ -15,7 +15,8 @@
                 </ul>
             </div>
         {% endif %}
-        <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Zaktualizuj{% else %}Zapisz{% endif %}</button>
+        <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Zaktualizuj{% else %}
+            Zapisz{% endif %}</button>
         <a href="{% url 'loan-list' %}" class="btn btn-secondary">Anuluj</a>
     </form>
 {% endblock %}

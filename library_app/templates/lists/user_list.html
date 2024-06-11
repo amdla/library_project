@@ -1,29 +1,30 @@
+<!-- templates/lists/user_list.html -->
 {% extends 'library_app/base.html' %}
 {% block content %}
-<h1>Lista Użytkowników</h1>
-<a href="{% url 'user-create' %}" class="btn btn-primary mb-3">Dodaj nowego użytkownika</a>
+    <h1>Lista Użytkowników</h1>
+    <a href="{% url 'user-create' %}" class="btn btn-primary mb-3">Dodaj nowego użytkownika</a>
 
-<table class="table table-striped">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Nazwa użytkownika</th>
-      <th scope="col">Akcje</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for user in users %}
-      <tr>
-        <td>{{ user.username }}</td>
-        <td>
-          <a href="{% url 'user-delete' user.pk %}" class="btn btn-danger btn-sm">Usuń</a>
-        </td>
-      </tr>
-    {% empty %}
-      <tr>
-        <td colspan="2" class="text-center">Brak użytkowników do wyświetlenia.</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Nazwa użytkownika</th>
+            <th scope="col">Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>
+                    <a href="{% url 'user-delete' user.pk %}" class="btn btn-danger btn-sm">Usuń</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="2" class="text-center">Brak użytkowników do wyświetlenia.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
 
