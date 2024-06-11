@@ -1,7 +1,20 @@
-<!-- templates/library_app/home.html -->
 {% extends 'library_app/base.html' %}
 {% block content %}
-    <h1>Witamy w Bibliotece!</h1>
-    <p>To jest strona główna Twojej biblioteki. Tutaj możesz umieścić informacje o bibliotece, ważne ogłoszenia, czy też ciekawostki.</p>
+    <h1 style="margin-bottom: 20px;">Witamy w Systemie Zarządzania Biblioteką!</h1>
+    <p style="margin-bottom: 20px;">To jest strona główna Twojego systemu zarządzania biblioteką. Tutaj możesz zarządzać książkami, użytkownikami oraz wypożyczeniami.</p>
 
+    <section style="margin-bottom: 20px;">
+        <h2 style="margin-bottom: 20px;">Szybkie Akcje</h2>
+        <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 20px;"><a href="{% url 'book-create' %}" class="btn btn-primary">Dodaj Nową Książkę</a></li>
+            <li style="margin-bottom: 20px;"><a href="{% url 'user-create' %}" class="btn btn-primary">Dodaj Nowego Użytkownika</a></li>
+            <li style="margin-bottom: 20px;"><a href="{% url 'loan-create' %}" class="btn btn-primary">Dodaj Nowe Wypożyczenie</a></li>
+        </ul>
+    </section>
+
+    <section style="margin-bottom: 20px;">
+        <h2 style="margin-bottom: 20px;">Kontakt z Administratorem</h2>
+        <p style="margin-bottom: 20px;">Masz pytania lub problemy? Skontaktuj się z administratorem systemu.</p>
+        <p style="margin-bottom: 20px;"><strong>Email:</strong> <a href="mailto:maciej.m.karabin@gmail.com">maciej.m.karabin@gmail.com</a></p>
+    </section>
 {% endblock %}
