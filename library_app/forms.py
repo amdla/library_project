@@ -17,10 +17,9 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book
-        fields = ('isbn', 'status')
+        fields = ('isbn',)
 
 
-# forms.py
 class LoanForm(forms.ModelForm):
     book = BookIDChoiceField(queryset=Book.objects.filter(status='available'), label='ID książki')
     borrower = forms.ModelChoiceField(queryset=User.objects.all(), label='Wypożyczający')
@@ -28,7 +27,7 @@ class LoanForm(forms.ModelForm):
 
     class Meta:
         model = Loan
-        fields = ('book', 'borrower', 'return_date')  # Removed 'is_returned' from here
+        fields = ('book', 'borrower', 'return_date')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -46,7 +45,6 @@ class LoanForm(forms.ModelForm):
         if book.status != 'available':
             raise ValidationError("Wybrana książka nie jest dostępna.")
         return book
-
 
 
 class UserForm(forms.ModelForm):

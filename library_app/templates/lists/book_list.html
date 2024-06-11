@@ -12,7 +12,7 @@
             <th scope="col">Tytuł</th>
             <th scope="col">Autorzy</th>
             <th scope="col">Rok publikacji</th>
-            <th scope="col">Status</th>  <!-- Translated label for status -->
+            <th scope="col">Status</th>
             <th scope="col">Akcje</th>
         </tr>
         </thead>
@@ -23,8 +23,8 @@
                 <td>{{ book.isbn }}</td>
                 <td>{{ book.title }}</td>
                 <td>{{ book.authors }}</td>
-                <td>{{ book.publication_date }}</td>
-                <td>{{ book.get_status_display }}</td>  <!-- Display translated status -->
+                <td>{{ book.publication_date|slice:":4" }}</td>
+                <td>{{ book.get_status_display }}</td>
                 <td>
                     <a href="{% url 'book-delete' book.pk %}" class="btn btn-danger btn-sm">Usuń</a>
                 </td>

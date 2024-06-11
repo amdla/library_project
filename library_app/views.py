@@ -128,7 +128,6 @@ def loan_update(request, pk):
     return render(request, 'forms/loan_form.html', {'form': form})
 
 
-
 def loan_delete(request, pk):
     loan = get_object_or_404(Loan, pk=pk)
     if request.method == 'POST':
@@ -150,4 +149,3 @@ def loan_return(request, pk):
         loan.book.save()
         loan.save()
         return HttpResponseRedirect(reverse('loan-list'))
-

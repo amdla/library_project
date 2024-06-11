@@ -17,7 +17,7 @@ class Book(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='available')
     unique_id = models.AutoField(primary_key=True, unique=True)
     libraryID = models.CharField(max_length=36, unique=True, blank=True, default='')
-    book_status = models.BooleanField(default=False)  # New field added
+    book_status = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.libraryID:
@@ -25,7 +25,7 @@ class Book(models.Model):
         if not self.title or not self.authors:
             self.fill_book_data()
         if not self.status:
-            self.status = 'available'  # Ensure the status is set to 'available' if not specified
+            self.status = 'available'
         super(Book, self).save(*args, **kwargs)
 
     def fill_book_data(self):
@@ -41,7 +41,6 @@ class Book(models.Model):
 
     def __str__(self):
         return str(self.unique_id)
-
 
 
 class Loan(models.Model):
