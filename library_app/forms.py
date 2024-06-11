@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from django.utils import timezone
+import requests
 
 from .models import Book, Loan
 from django.forms.widgets import DateInput
@@ -18,6 +18,14 @@ class BookForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ('isbn',)
+
+    def clean_isbn(self):
+        isbn = self.cleaned_data.get('isbn')
+        url = f'https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}'
+        response = requests.get(url)
+        if response.status_code != 200 or 'items' not in response.json():
+            raise forms.ValidationError("Nieprawidłowy kod ISBN, albo nie znaleziono danych dla podanego kodu ISBN.")
+        return isbn
 
 
 class LoanForm(forms.ModelForm):
