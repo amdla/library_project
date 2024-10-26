@@ -1,0 +1,44 @@
+<!-- templates/lists/notification_list.html -->
+{% extends 'library_app/base.html' %}
+{% block content %}
+    <h1>Lista Powiadomień</h1>
+    <a href="{% url 'notification-create' %}" class="btn btn-primary mb-3">Dodaj Powiadomienie</a>
+
+    <table id="notificationTable" class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID Powiadomienia</th>
+            <th scope="col">Użytkownik</th>
+            <th scope="col">Wiadomość</th>
+            <th scope="col">Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for notification in notifications %}
+            <tr>
+                <td>{{ notification.notification_id }}</td>
+                <td>{{ notification.user.username }}</td>
+                <td>{{ notification.message }}</td>
+                <td>
+                    <a href="{% url 'notification-update' notification.pk %}" class="btn btn-warning btn-sm">Edytuj</a>
+                    <a href="{% url 'notification-delete' notification.pk %}" class="btn btn-danger btn-sm">Usuń</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">Brak powiadomień do wyświetlenia.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        $(document).ready(function () {
+            $('#notificationTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.11.3/i18n/pl.json"
+                }
+            });
+        });
+    </script>
+{% endblock %}

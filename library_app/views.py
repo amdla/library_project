@@ -1,10 +1,10 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils import timezone
-from .models import Book, Loan
-from .forms import BookForm, LoanForm, UserForm, LoanUpdateForm
+
+from .forms import BookForm, LoanForm, UserForm, LoanUpdateForm, SubscriptionForm, NotificationForm
+from .models import Book, Users, Loan, Subscription, Notification
 
 
 def home(request):
@@ -16,9 +16,9 @@ def user_create(request):
         user_form = UserForm(request.POST)
         if user_form.is_valid():
             user = user_form.save(commit=False)
-            user.username = (f"{user_form.cleaned_data['first_name']}"
-                             f"|{user_form.cleaned_data['last_name']}"
-                             f"|{user_form.cleaned_data['email']}")
+            user.username = (
+                f"{user_form.cleaned_data['first_name']}|{user_form.cleaned_data['last_name']}"
+                f"|{user_form.cleaned_data['email']}")
             user.save()
             return redirect('user-list')
     else:
@@ -27,12 +27,12 @@ def user_create(request):
 
 
 def user_list(request):
-    users = User.objects.all()
+    users = Users.objects.all()
     return render(request, 'lists/user_list.html', {'users': users})
 
 
 def user_update(request, pk):
-    user = get_object_or_404(User, pk=pk)
+    user = get_object_or_404(Users, pk=pk)
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=user)
         if user_form.is_valid():
@@ -44,7 +44,7 @@ def user_update(request, pk):
 
 
 def user_delete(request, pk):
-    user = get_object_or_404(User, pk=pk)
+    user = get_object_or_404(Users, pk=pk)
     if request.method == 'POST':
         user.delete()
         return redirect('user-list')
@@ -149,3 +149,76 @@ def loan_return(request, pk):
         loan.book.save()
         loan.save()
         return HttpResponseRedirect(reverse('loan-list'))
+
+
+def subscription_list(request):
+    subscriptions = Subscription.objects.all()
+    return render(request, 'lists/subscription_list.html', {'subscriptions': subscriptions})
+
+
+def subscription_create(request):
+    if request.method == 'POST':
+        form = SubscriptionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('subscription-list')
+    else:
+        form = SubscriptionForm()
+    return render(request, 'forms/subscription_form.html', {'form': form})
+
+
+def subscription_update(request, pk):
+    subscription = get_object_or_404(Subscription, pk=pk)
+    if request.method == 'POST':
+        form = SubscriptionForm(request.POST, instance=subscription)
+        if form.is_valid():
+            form.save()
+            return redirect('subscription-list')
+    else:
+        form = SubscriptionForm(instance=subscription)
+    return render(request, 'forms/subscription_form.html', {'form': form})
+
+
+def subscription_delete(request, pk):
+    subscription = get_object_or_404(Subscription, pk=pk)
+    if request.method == 'POST':
+        subscription.delete()
+        return redirect('subscription-list')
+    return render(request, 'forms/subscription_confirm_delete.html', {'subscription': subscription})
+
+
+# Notifications Views
+def notification_list(request):
+    notifications = Notification.objects.all()
+    return render(request, 'lists/notification_list.html', {'notifications': notifications})
+
+
+def notification_create(request):
+    if request.method == 'POST':
+        form = NotificationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('notification-list')
+    else:
+        form = NotificationForm()
+    return render(request, 'forms/notification_form.html', {'form': form})
+
+
+def notification_update(request, pk):
+    notification = get_object_or_404(Notification, pk=pk)
+    if request.method == 'POST':
+        form = NotificationForm(request.POST, instance=notification)
+        if form.is_valid():
+            form.save()
+            return redirect('notification-list')
+    else:
+        form = NotificationForm(instance=notification)
+    return render(request, 'forms/notification_form.html', {'form': form})
+
+
+def notification_delete(request, pk):
+    notification = get_object_or_404(Notification, pk=pk)
+    if request.method == 'POST':
+        notification.delete()
+        return redirect('notification-list')
+    return render(request, 'forms/notification_confirm_delete.html', {'notification': notification})
