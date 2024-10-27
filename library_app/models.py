@@ -68,9 +68,14 @@ class Loan(models.Model):
 
 
 class Subscription(models.Model):
+    TYPE_CHOICES = [
+        ('standard', 'Standard'),
+        ('premium', 'Premium'),
+        ('vip', 'VIP'),
+    ]
     subscription_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
-    subscription_type = models.CharField(max_length=100)
+    subscription_type = models.CharField(max_length=100, choices=TYPE_CHOICES, default='standard')
     expiration_date = models.DateField()
 
     def __str__(self):

@@ -1,6 +1,5 @@
 import requests
 from django import forms
-from django.contrib.auth.models import User
 from django.forms.widgets import DateInput
 from django.utils import timezone
 
@@ -29,9 +28,9 @@ class BookForm(forms.ModelForm):
 
 
 class LoanForm(forms.ModelForm):
-    book = BookIDChoiceField(queryset=Book.objects.filter(status='available'), label='ID książki')
-    borrower = forms.ModelChoiceField(queryset=User.objects.all(), label='Wypożyczający')
-    return_date = forms.DateField(widget=DateInput(attrs={'type': 'date'}), label='Data zwrotu')
+    book = BookIDChoiceField(queryset=Book.objects.filter(status='available'), label='Book ID')
+    borrower = forms.ModelChoiceField(queryset=Users.objects.all(), label='Borrower')
+    return_date = forms.DateField(widget=DateInput(attrs={'type': 'date'}), label='Return Date')
 
     class Meta:
         model = Loan
@@ -40,7 +39,7 @@ class LoanForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['book'].queryset = Book.objects.filter(status='available')
-        self.fields['borrower'].queryset = User.objects.all()
+        self.fields['borrower'].queryset = Users.objects.all()
 
     def clean_return_date(self):
         return_date = self.cleaned_data.get('return_date')
@@ -88,8 +87,8 @@ class LoanUpdateForm(forms.ModelForm):
 
 class SubscriptionForm(forms.ModelForm):
     user = forms.ModelChoiceField(queryset=Users.objects.all(), label='Użytkownik')
-    subscription_type = forms.CharField(label='Typ Subskrypcji')
-    expiration_date = forms.DateField(widget=DateInput(attrs={'type': 'date'}), label='Data Wygaśnięcia')
+    subscription_type = forms.ChoiceField(choices=Subscription.TYPE_CHOICES, label='Typ subskrybcji')
+    expiration_date = forms.DateField(widget=DateInput(attrs={'type': 'date'}), label='Data wygaśnięcia')
 
     class Meta:
         model = Subscription
@@ -98,6 +97,12 @@ class SubscriptionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['user'].queryset = Users.objects.all()
+
+    def clean_expiration_date(self):
+        expiration_date = self.cleaned_data.get('expiration_date')
+        if expiration_date <= timezone.now().date():
+            raise forms.ValidationError("Data wygaśnięcia subskrybcji musi być późniejsza niż dzisiejsza data.")
+        return expiration_date
 
 
 class NotificationForm(forms.ModelForm):

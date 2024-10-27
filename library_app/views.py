@@ -100,8 +100,9 @@ def loan_create(request):
         form = LoanForm(request.POST)
         if form.is_valid():
             loan = form.save(commit=False)
+            loan.user = form.cleaned_data.get('borrower')
             loan.loan_date = timezone.now()
-            loan.book.status = 'wypożyczona'
+            loan.book.status = 'borrowed'
             loan.book.save()
             loan.save()
             return redirect('loan-list')
