@@ -1,1 +1,1 @@
-TODO seems to be empty.
+naprawić stopkę

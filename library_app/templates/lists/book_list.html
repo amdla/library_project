@@ -1,4 +1,3 @@
-<!-- templates/lists/book_list.html -->
 {% extends 'library_app/base.html' %}
 {% block content %}
     <h1>Lista Książek</h1>
@@ -36,14 +35,21 @@
         {% endfor %}
         </tbody>
     </table>
-
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         $(document).ready(function () {
+            console.log('Document is ready');
             $('#bookTable').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "searching": true,
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.11.3/i18n/pl.json"
                 }
             });
         });
     </script>
+
 {% endblock %}

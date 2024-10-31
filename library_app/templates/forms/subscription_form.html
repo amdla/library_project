@@ -1,0 +1,14 @@
+<!-- templates/forms/subscription_form.html -->
+{% extends 'library_app/base.html' %}
+
+{% block content %}
+    <h1>{% if form.instance.pk %}Edytuj Subskrypcję{% else %}Dodaj Subskrypcję{% endif %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">
+            {% if form.instance.pk %}Zaktualizuj{% else %}Zapisz{% endif %}
+        </button>
+        <a href="{% url 'subscription-list' %}" class="btn btn-secondary">Anuluj</a>
+    </form>
+{% endblock %}
